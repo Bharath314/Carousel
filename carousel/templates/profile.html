@@ -1,79 +1,86 @@
 {% extends "layout.html" %}
 {% block content %}
-<div>
-    <img class="rounded-circle account-img" src="{{ current_user.display_picture }}">
+<div class="container" style="width: 50rem">
+<div class="container">
+    <img class="rounded-circle account-img" src="{{ current_user.display_picture }}" style="width: 10rem; height: 10rem; object-fit: cover;">
     <h1>{{ current_user.username }}</h1>
-    <div>
-        Posts
-        {{ posts|length }}
-    </div>
-    <div>
-        Followers
-        {{ followers|length }}
-    </div>
-    <div>
-        Following
-        {{ following|length }}
+    <div class="container text-center">
+        <div class="row align-items-start">
+            <div class="col">
+                <h5>Posts</h5>
+                <h5>{{ posts|length }}</h5>
+            </div>
+            <div class="col">
+                <h5>Followers</h5>
+                <h5>{{ followers|length }}</h5>
+            </div>
+            <div class="col">
+                <h5>Following</h5>
+                <h5>{{ following|length }}</h5>
+            </div>
+        </div>
     </div>
 </div>
 
-
+<div class="container">
 <form method="POST" action="" enctype="multipart/form-data" novalidate>
     {{ form.hidden_tag() }}
     <fieldset>
-        <div class="position-relative">
-            {{ form.username.label(for="validationServerUsername", class="form-label") }}
+        <div class="position-relative mb-3">
+            {{ form.username.label(for="validationUsername", class="form-label") }}
             <div class="input-group has-validation">
                 <span class="input-group-text" id="inputGroupPrepend3">@</span>
                 {% if form.username.errors %}
-                {{ form.username(class="form-control is-invalid", id="validationServerUsername") }}
-                <div class="invalid-tooltip">
+                {{ form.username(class="form-control is-invalid", id="validationUsername") }}
+                <div class="invalid-feedback">
                     {% for error in form.username.errors %}
                     <span>{{ error }}</span>
                     {% endfor %}
                 </div>
                 {% else %}
-                {{ form.username(class="form-control", id="validationDP") }}
+                    {{ form.username(class="form-control", id="validationUsername") }}
                 {% endif %}
             </div>
         </div>
-        <div class="position-relative">
-            {{ form.display_picture.label(for="validationServerDP", class="form-label") }}
+        <div class="position-relative mb-3">
+            {{ form.display_picture.label(for="validationDP", class="form-label") }}
             <div class="input-group has-validation">
                 {% if form.display_picture.errors %}
-                {{ form.display_picture(class="form-control is-invalid", id="validationServerDP") }}
+                {{ form.display_picture(class="form-control is-invalid", id="validationDP") }}
                 <div class="invalid-feedback">
                     {% for error in form.display_picture.errors %}
                     <span>{{ error }}</span>
                     {% endfor %}
                 </div>
                 {% else %}
-                {{ form.display_picture(class="form-control", id="validationDP") }}
+                    {{ form.display_picture(class="form-control", id="validationDP") }}
                 {% endif %}
             </div>
         </div>
     </fieldset>
     <div>
-        {{ form.submit() }}
+        {{ form.submit(class="btn btn-secondary") }}
     </div>
 </form>
+</div>
+
+<br>
 
 {% for post in posts %}
-<article>
-    <div>
-        <p class="article-content">{{ post.caption }}</p>
-        {% if post.image_file %}
-        <div><img src="static/posts/{{ post.image_file }}"></div>
-        {% endif %}
-        <small class="text-muted">{{ post.date_posted.strftime('%Y-%m-%d') }}</small>
+<div class="card my-1 mx-auto" style="width: 50rem;">
+    <div class="card-body">
+        <a href="{{ url_for('update_post', username=current_user.username, post_id=post.id ) }}" class="btn btn-primary">Update</a>
+        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
+            Delete
+        </button>
+        <p class="card-text mb-0">{{ post.caption }}</p>
+        <p class="text-muted mb-0">{{ post.date_posted.strftime('%Y-%m-%d') }}</p>
     </div>
-</article>
-<a href="{{ url_for('update_post', username=current_user.username, post_id=post.id ) }}"
-    class="btn btn-primary">Update</a>
+    {% if post.image_file %}
+        <div class="card-img-bottom px-auto"><img src="{{ url_for('static', filename = 'posts/' + post.image_file) }}" style="width: 100%"></div>
+    {% endif %}
+</div>
 
-<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
-    Delete
-</button>
 
 <!-- Modal -->
 <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
@@ -98,6 +105,6 @@
 
 
 {% endfor %}
-
+</div>
 
 {% endblock content %}

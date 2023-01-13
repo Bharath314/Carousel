@@ -27,6 +27,12 @@ def save_dp(form):
 @app.route('/profile', methods=['GET', 'POST'])
 def profile():
     form = UpdateAccountForm(current_username=current_user.username)
+    print(current_user.display_picture)
+    print(os.path.join(
+                        app.root_path, 'static/profile_pictures/default.png'))
+    print(current_user.display_picture != os.path.join(
+        app.root_path, 'static/profile_pictures/default.png'
+    ))
     if form.validate_on_submit():
         user_to_update = User.query.filter_by(username=current_user.username).first()
         user_to_update.username = form.username.data
@@ -35,15 +41,17 @@ def profile():
         else:
             _, dp_name_update = os.path.splitext(current_user.display_picture)
             dp_name_update = form.username.data + dp_name_update
-            os.rename(
-                os.path.join(
-                    app.root_path, 'static/profile_pictures', current_user.display_picture.split('/')[-1]
-                ),
-                os.path.join(
-                    app.root_path, 'static/profile_pictures', dp_name_update
+            
+            if current_user.display_picture != '/static/profile_pictures/default.png':
+                os.rename(
+                    os.path.join(
+                        app.root_path, 'static/profile_pictures', current_user.display_picture.split('/')[-1]
+                    ),
+                    os.path.join(
+                        app.root_path, 'static/profile_pictures', dp_name_update
+                    )
                 )
-            )
-            user_to_update.display_picture = dp_name_update
+                user_to_update.display_picture = dp_name_update
         db.session.commit()
         current_user.login(user_to_update)
     if request.method == 'GET':
@@ -141,7 +149,7 @@ def user_posts(username):
             user_id=user.id
         ).all())),
         followers = [follower.follower_id for follower in Followers.query.filter_by(followed_id = user.id).all()],
-        following = [followee.following_id for followee in Followers.query.filter_by(follower_id = user.id).all()],
+        following = [followee.followed_id for followee in Followers.query.filter_by(follower_id = user.id).all()],
         current_user=current_user
     )
 

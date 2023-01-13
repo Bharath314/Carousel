@@ -1,10 +1,11 @@
 {% extends "layout.html" %}
 {% block content %}
+<div class="container" style="width: 50rem">
 <form method="POST" action="" enctype="multipart/form-data" novalidate>
     {{ form.hidden_tag() }}
     <fieldset>
         <legend>{{ legend }}</legend>
-        <div class="position-relative">
+        <div class="position-relative mb-3">
             {{ form.caption.label(for="validationCaption", class="form-label") }}
             <div class = "input-group has-validation">
                 {% if form.caption.errors %}
@@ -19,7 +20,7 @@
                 {% endif %}
             </div>
         </div>
-        <div class="position-relative">
+        <div class="position-relative mb-3">
             {{ form.picture.label(for="validationPicture", class="form-label") }}
             <div class = "input-group has-validation">
                 {% if form.picture.errors %}
@@ -36,7 +37,8 @@
         </div>
     </fieldset>
     <div>
-        {{ form.submit() }}
+        {{ form.submit(class="btn btn-secondary") }}
     </div>
 </form>
+</div>
 {% endblock content %}

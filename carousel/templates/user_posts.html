@@ -1,39 +1,48 @@
 {% extends "layout.html" %}
 {% block content %}
-<div>
-    <img class="rounded-circle account-img" src="static/profile_pictures/{{ user.display_picture }}">
+<div class="container" style="width: 50rem">
+<div class="container mb-3">
+    <img class="rounded-circle account-img" src="static/profile_pictures/{{ user.display_picture }}" style="width: 10rem; height: 10rem; object-fit: cover;">
     <h1>{{ user.username }}</h1>
-    <div>
-        Posts
-        {{ posts|length }}
+    <div class="container text-center">
+        <div class="row align-items-start">
+            <div class="col">
+                <h5>Posts</h5>
+                <h5>{{ posts|length }}</h5>
+            </div>
+            <div class="col">
+                <h5>Followers</h5>
+                <h5>{{ followers|length }}</h5>
+            </div>
+            <div class="col">
+                <h5>Following</h5>
+                <h5>{{ following|length }}</h5>
+            </div>
+        </div>
     </div>
-    <div>
-        Followers
-        {{ followers|length }}
-    </div>
-    <div>
-        Following
-        {{ following|length }}
-    </div>
+    <div class="d-flex justify-content-center">
     {% if current_user.is_authenticated and current_user.username != user.username %}
         {% if current_user.user_id not in followers %}
-            <a href="{{ url_for('follow', user_id = user.id) }}">Follow</a>
+            <a class="btn btn-primary" href="{{ url_for('follow', user_id = user.id) }}">Follow</a>
         {% else %}
-            <a href="{{ url_for('unfollow', user_id = user.id) }}">Unfollow</a>
+            <a class="btn btn-secondary" href="{{ url_for('unfollow', user_id = user.id) }}">Unfollow</a>
         {% endif %}
-        
     {% endif %}
+    </div>  
 </div>
 
-    {% for post in posts %}
-        <article>
-            <div>
-                <p class="article-content">{{ post.caption }}</p>
-                {% if post.image_file %}
-                    <div><img src="static/posts/{{ post.image_file }}"></div>
-                {% endif %}
-                <small class="text-muted">{{ post.date_posted.strftime('%Y-%m-%d') }}</small>
-            </div>
-        </article>
-    {% endfor %}
+{% for post in posts %}
+    <div class="card my-1 mx-auto mb-3" style="width: 50rem;">
+        <div class="card-body">
+            <h5 class="card-title"><a class="username nav-link" href="/{{ post.author.username }}">{{ post.author.username }}</a></h5>
+            <p class="card-text mb-0">{{ post.caption }}</p>
+            <p class="text-muted mb-0">{{ post.date_posted.strftime('%Y-%m-%d') }}</p>
+        </div>
+        {% if post.image_file %}
+            <div class="card-img-bottom px-auto"><img src="{{ url_for('static', filename = 'posts/' + post.image_file) }}" style="width: 100%"></div>
+        {% endif %}
+    </div>
+{% endfor %}
+
+</div>
 {% endblock content %}

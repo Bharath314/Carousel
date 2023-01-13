@@ -1,11 +1,11 @@
 {% extends "layout.html" %}
 {% block content %}
-<div>
+<div class="container" style="width: 50rem">
     <form method="POST" action="" novalidate>
         {{ form.hidden_tag() }}
         <fieldset>
             <legend>Search</legend>
-            <div class="position-relative">
+            <div class="position-relative mb-3">
                 {{ form.search_term.label(for="validationSearch", class="form-label") }}
                 <div class = "input-group has-validation">
                     <span class="input-group-text" id="inputGroupPrepend3">
@@ -27,14 +27,14 @@
             </div>
         </fieldset>
         <div>
-            {{ form.submit() }}
+            {{ form.submit(class="btn btn-primary mb-3") }}
         </div>
     </form>
     <div>
         {% if form.search_results %}
-            <ul>
+            <ul class="list-group">
             {% for result in form.search_results %}
-                <li><a href="{{ url_for('user_posts', username=result) }}">{{ result }}</a></li>
+                <li class="list-group-item"><a class="nav-link" href="{{ url_for('user_posts', username=result) }}">{{ result }}</a></li>
             {% endfor %}
             </ul>
         {% endif %}

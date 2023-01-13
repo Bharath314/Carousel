@@ -31,7 +31,7 @@ class LoginForm(FlaskForm):
 
 
 class PostForm(FlaskForm):
-    caption = TextAreaField('caption',  validators=[DataRequired()])
+    caption = TextAreaField('Caption',  validators=[DataRequired()])
     picture = FileField('Upload an image(Optional)', validators=[FileAllowed(['jpg', 'png', 'jpeg'])])
     submit = SubmitField('Post')
 
@@ -60,7 +60,7 @@ class SearchBar(FlaskForm):
         print(self.users)
         self.search_results = []
     search_term = StringField('Search for users',
-                              validators=[DataRequired(), Length(min=2, max=20)])
+                              validators=[DataRequired(), Length(max=20)])
     submit = SubmitField('Search')
     def validate_search_term(self, search_term):
         print('--------------doing---------------')

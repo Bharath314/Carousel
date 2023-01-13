@@ -1,11 +1,12 @@
 {% extends "layout.html" %}
 {% block content %}
+<div class="container" style="width: 50rem">
 <div>
     <form method="POST" action="" novalidate>
         {{ form.hidden_tag() }}
         <fieldset>
             <legend>Join Today</legend>
-            <div class="position-relative">
+            <div class="position-relative mb-3">
                 {{ form.username.label(for="validationServerUsername", class="form-label") }}
                 <div class = "input-group has-validation">
                     <span class="input-group-text" id="inputGroupPrepend3">@</span>
@@ -21,7 +22,7 @@
                     {% endif %}
                 </div>
             </div>
-            <div class="position-relative">
+            <div class="position-relative mb-3">
                 {{ form.password.label() }}
                 {% if form.password.errors %}
                     {{ form.password(class="form-control is-invalid") }}
@@ -36,7 +37,7 @@
             </div>
         </fieldset>
         <div>
-            {{ form.submit() }}
+            {{ form.submit(class="btn btn-primary") }}
         </div>
     </form>
 </div>
@@ -45,5 +46,6 @@
     <small>
         Don't have an account? <a href="{{ url_for('register') }}">Sign Up</a>
     </small>
+</div>
 </div>
 {% endblock content %}
