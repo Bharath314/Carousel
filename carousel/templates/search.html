@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+{% block content %}
+<div>
+    <form method="POST" action="" novalidate>
+        {{ form.hidden_tag() }}
+        <fieldset>
+            <legend>Search</legend>
+            <div class="position-relative">
+                {{ form.search_term.label(for="validationSearch", class="form-label") }}
+                <div class = "input-group has-validation">
+                    <span class="input-group-text" id="inputGroupPrepend3">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                        </svg>
+                    </span>
+                    {% if form.search_term.errors %}
+                        {{ form.search_term(class="form-control is-invalid", id="validationSearch") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.search_term.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.search_term(class="form-control", id="validationSearch") }}
+                    {% endif %}
+                </div>
+            </div>
+        </fieldset>
+        <div>
+            {{ form.submit() }}
+        </div>
+    </form>
+    <div>
+        {% if form.search_results %}
+            <ul>
+            {% for result in form.search_results %}
+                <li><a href="{{ url_for('user_posts', username=result) }}">{{ result }}</a></li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+</div>
+{% endblock content %}

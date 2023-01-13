@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+{% block content %}
+<form method="POST" action="" enctype="multipart/form-data" novalidate>
+    {{ form.hidden_tag() }}
+    <fieldset>
+        <legend>{{ legend }}</legend>
+        <div class="position-relative">
+            {{ form.caption.label(for="validationCaption", class="form-label") }}
+            <div class = "input-group has-validation">
+                {% if form.caption.errors %}
+                    {{ form.caption(class="form-control is-invalid", id="validationCaption") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.caption.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.caption(class="form-control", id="validationCaption") }}
+                {% endif %}
+            </div>
+        </div>
+        <div class="position-relative">
+            {{ form.picture.label(for="validationPicture", class="form-label") }}
+            <div class = "input-group has-validation">
+                {% if form.picture.errors %}
+                    {{ form.picture(class="form-control is-invalid", id="validationPicture") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.picture.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.picture(class="form-control", id="validationPicture") }}
+                {% endif %}
+            </div>
+        </div>
+    </fieldset>
+    <div>
+        {{ form.submit() }}
+    </div>
+</form>
+{% endblock content %}

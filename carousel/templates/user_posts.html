@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+{% block content %}
+<div>
+    <img class="rounded-circle account-img" src="static/profile_pictures/{{ user.display_picture }}">
+    <h1>{{ user.username }}</h1>
+    <div>
+        Posts
+        {{ posts|length }}
+    </div>
+    <div>
+        Followers
+        {{ followers|length }}
+    </div>
+    <div>
+        Following
+        {{ following|length }}
+    </div>
+    {% if current_user.is_authenticated and current_user.username != user.username %}
+        {% if current_user.user_id not in followers %}
+            <a href="{{ url_for('follow', user_id = user.id) }}">Follow</a>
+        {% else %}
+            <a href="{{ url_for('unfollow', user_id = user.id) }}">Unfollow</a>
+        {% endif %}
+        
+    {% endif %}
+</div>
+
+    {% for post in posts %}
+        <article>
+            <div>
+                <p class="article-content">{{ post.caption }}</p>
+                {% if post.image_file %}
+                    <div><img src="static/posts/{{ post.image_file }}"></div>
+                {% endif %}
+                <small class="text-muted">{{ post.date_posted.strftime('%Y-%m-%d') }}</small>
+            </div>
+        </article>
+    {% endfor %}
+{% endblock content %}

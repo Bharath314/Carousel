@@ -1,0 +1,49 @@
+{% extends "layout.html" %}
+{% block content %}
+<div>
+    <form method="POST" action="" novalidate>
+        {{ form.hidden_tag() }}
+        <fieldset>
+            <legend>Join Today</legend>
+            <div class="position-relative">
+                {{ form.username.label(for="validationServerUsername", class="form-label") }}
+                <div class = "input-group has-validation">
+                    <span class="input-group-text" id="inputGroupPrepend3">@</span>
+                    {% if form.username.errors %}
+                        {{ form.username(class="form-control is-invalid", id="validationServerUsername") }}
+                        <div class="invalid-tooltip">
+                            {% for error in form.username.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.username(class="form-control", id="validationTooltipUsername") }}
+                    {% endif %}
+                </div>
+            </div>
+            <div class="position-relative">
+                {{ form.password.label() }}
+                {% if form.password.errors %}
+                    {{ form.password(class="form-control is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.password.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.password(class="form-control") }}
+                {% endif %}
+            </div>
+        </fieldset>
+        <div>
+            {{ form.submit() }}
+        </div>
+    </form>
+</div>
+
+<div>
+    <small>
+        Don't have an account? <a href="{{ url_for('register') }}">Sign Up</a>
+    </small>
+</div>
+{% endblock content %}

@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+{% block content %}
+    {% for post in posts %}
+    {% if post.author.username != current_user.username %}
+        <article>
+            <div>
+                <div class="article-metadata">
+                    <a class="username" href="/{{ post.author.username }}">{{ post.author.username }}</a>
+                </div>
+                <p class="article-content">{{ post.caption }}</p>
+                {% if post.image_file %}
+                    <div><img src="{{ url_for('static', filename = 'posts/' + post.image_file) }}"></div>
+                {% endif %}
+                <small class="text-muted">{{ post.date_posted.strftime('%Y-%m-%d') }}</small>
+            </div>
+        </article>
+    {% endif %}
+    {% endfor %}
+{% endblock content %}

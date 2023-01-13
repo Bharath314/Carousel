@@ -1,0 +1,103 @@
+{% extends "layout.html" %}
+{% block content %}
+<div>
+    <img class="rounded-circle account-img" src="{{ current_user.display_picture }}">
+    <h1>{{ current_user.username }}</h1>
+    <div>
+        Posts
+        {{ posts|length }}
+    </div>
+    <div>
+        Followers
+        {{ followers|length }}
+    </div>
+    <div>
+        Following
+        {{ following|length }}
+    </div>
+</div>
+
+
+<form method="POST" action="" enctype="multipart/form-data" novalidate>
+    {{ form.hidden_tag() }}
+    <fieldset>
+        <div class="position-relative">
+            {{ form.username.label(for="validationServerUsername", class="form-label") }}
+            <div class="input-group has-validation">
+                <span class="input-group-text" id="inputGroupPrepend3">@</span>
+                {% if form.username.errors %}
+                {{ form.username(class="form-control is-invalid", id="validationServerUsername") }}
+                <div class="invalid-tooltip">
+                    {% for error in form.username.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% else %}
+                {{ form.username(class="form-control", id="validationDP") }}
+                {% endif %}
+            </div>
+        </div>
+        <div class="position-relative">
+            {{ form.display_picture.label(for="validationServerDP", class="form-label") }}
+            <div class="input-group has-validation">
+                {% if form.display_picture.errors %}
+                {{ form.display_picture(class="form-control is-invalid", id="validationServerDP") }}
+                <div class="invalid-feedback">
+                    {% for error in form.display_picture.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% else %}
+                {{ form.display_picture(class="form-control", id="validationDP") }}
+                {% endif %}
+            </div>
+        </div>
+    </fieldset>
+    <div>
+        {{ form.submit() }}
+    </div>
+</form>
+
+{% for post in posts %}
+<article>
+    <div>
+        <p class="article-content">{{ post.caption }}</p>
+        {% if post.image_file %}
+        <div><img src="static/posts/{{ post.image_file }}"></div>
+        {% endif %}
+        <small class="text-muted">{{ post.date_posted.strftime('%Y-%m-%d') }}</small>
+    </div>
+</article>
+<a href="{{ url_for('update_post', username=current_user.username, post_id=post.id ) }}"
+    class="btn btn-primary">Update</a>
+
+<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
+    Delete
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="deleteModalLabel">Are you sure you want to delete this post?</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                This action can't be undone.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                <form action="{{ url_for('delete_post', username=current_user.username, post_id=post.id) }}" method="POST">
+                    <input class="btn btn-danger" type="submit" value="Delete">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endfor %}
+
+
+{% endblock content %}
