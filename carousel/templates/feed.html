@@ -2,7 +2,7 @@
 {% block content %}
     {% for post in posts %}
     {% if post.author.username != current_user.username %}
-            <div class="card my-1 mx-auto mb-3" style="width: 50rem;">
+            <div class="card my-1 mx-auto mb-3"  style="width: 50rem">
                 <div class="card-body">
                     <h5 class="card-title"><a class="username nav-link" href="/{{ post.author.username }}">{{ post.author.username }}</a></h5>
                     <p class="card-text mb-0">{{ post.caption }}</p>

@@ -1,5 +1,6 @@
 {% extends "layout.html" %}
 {% block content %}
+<div class="container"  style="width: 50rem">
     <div>
         <form method="POST" action="" novalidate>
             {{ form.hidden_tag() }}
@@ -58,4 +59,5 @@
             Already have an account? <a href="{{ url_for('login') }}">Sign In</a>
         </small>
     </div>
+</div>
 {% endblock content %}

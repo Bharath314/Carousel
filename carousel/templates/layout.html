@@ -34,7 +34,7 @@
                             Search</a>
                         </li>
                     </ul>
-                    <ul class="navbar-nav px-5 mb-2 mb-lg-0 grid gap-3">
+                    <ul class="navbar-nav px-5 mb-2 mb-lg-0 align-items-center grid gap-3">
                         {% if current_user.is_authenticated %}
                         <li class="nav-item g-col-6"><a class="nav-link" href="{{ url_for('profile') }}">Welcome, <strong>{{ current_user.username }}</strong></a></li>
                         <li class="nav-item g-col-6"><a class="btn btn-primary" href="{{ url_for('create_post') }}">New Post</a></li>
