@@ -1,6 +1,8 @@
-from carousel import db, app, carousel_user
+from flask_sqlalchemy import SQLAlchemy
+from flask import current_app 
 from datetime import datetime
 
+db = SQLAlchemy()
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -31,6 +33,5 @@ class Followers(db.Model):
     follower_id = db.Column(db.Integer, primary_key=True, nullable=False)
 
 
-with app.app_context():
-    db.create_all()
-    current_user = carousel_user()
+
+    # current_user = carousel_user()

@@ -1,34 +1,43 @@
+import os
+
 from flask import Flask, render_template, url_for, flash, redirect
-from flask_sqlalchemy import SQLAlchemy
-from flask_bcrypt import Bcrypt
+from flask_sqlalchemy import SQLAlchemy   
 
-class carousel_user:
-    def __init__(self):
-        self.is_authenticated = False
-        self.user_id = None
-        self.username = None
-        self.display_picture = 'static/profile_pictures/default.png'
-    def login(self, user):
-        self.is_authenticated = True
-        self.user_id = user.id
-        self.username = user.username
-        self.display_picture = url_for('static', filename = 'profile_pictures/' + user.display_picture)
-    def logout(self):
-        self.is_authenticated = False
-        self.username = None
-        self.user_id = None
-        self.display_picture = 'default.png'
-    def __repr__(self) -> str:
-        return f"User('{self.username}', {self.is_authenticated}, '{self.display_picture}'"   
+from carousel.models import db
 
-app = Flask(__name__)
-app.config['SECRET_KEY'] = 'password'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
-db = SQLAlchemy(app)
-bcrypt = Bcrypt(app)
-db.init_app(app)
+def create_app(test_config=None):
+    # create and configure the app
+    app = Flask(__name__, instance_relative_config=True)
+    app.config.from_mapping(
+        SECRET_KEY='dev',
+        SQLALCHEMY_DATABASE_URI='sqlite:///site.db'
+        # DATABASE=os.path.join(app.instance_path, 'site.db'),
+    )
 
+    if test_config is None:
+        # load the instance config, if it exists, when not testing
+        app.config.from_pyfile('config.py', silent=True)
+    else:
+        # load the test config if passed in
+        app.config.from_mapping(test_config)
 
+    db.init_app(app)
 
-from carousel import routes
+    
+    with app.app_context():
+        db.create_all()
+    # ensure the instance folder exists
+    try:
+        os.makedirs(app.instance_path)
+    except OSError:
+        pass
+    
+    
+
+    # a simple page that says hello
+    @app.route('/')
+    def hello():
+        return 'Hello, World!'
+
+    return app
     
